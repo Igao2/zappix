@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<meta charset="UTF-8" lang="pt-br">
+<head>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.rawgit.com/davidshimjs/qrcodejs/gh-pages/qrcode.min.js"></script>
+</head>
+
+<body>
+    <div id="c">
+    <div class="container">
+    <input id="pix">pix
+    <br>
+    <input id ="valor">valor
+    <br>
+    <button id="enviar">Enviar</button>
+    <div id="qrcode"></div>
+    </div>
+    </div>
+</body>
+<script>
+var button = document.getElementById("enviar")
+button.addEventListener("click",function(){
+    console.log('1')
+    var pix = document.getElementById("pix").value
+var valor = document.getElementById("valor").value
+var cidade = "Itanhandu"
+var nome = "Igor"
+
+var payload = "00020126360014BR.GOV.BCB.PIX0114+55"+pix+"520400005303986540512.005802BR5903'126003'1262070503***6304DC91"
+var crc167 = crc16(payload)
+var link = "pix://" + payload
+var qrcodeElement = document.getElementById("qrcode");
+var qrcode = new QRCode(qrcodeElement, {
+  text: payload,
+  width: 110,
+  height: 110,
+
+})
+
+});
+
+function crc16(str) {
+    var crc = 0xFFFF;
+
+    for (var i = 0; i < str.length; i++) {
+      var byte = str.charCodeAt(i);
+      crc ^= (byte << 8);
+
+      for (var j = 0; j < 8; j++) {
+        if ((crc & 0x8000) !== 0) {
+          crc = (crc << 1) ^ 0x1021;
+        } else {
+          crc <<= 1;
+        }
+      }
+    }
+
+    return (crc & 0xFFFF).toString(16).toUpperCase().padStart(4, '0');
+  }
+</script>
