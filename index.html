@@ -1,19 +1,28 @@
 <!DOCTYPE html>
 <meta charset="UTF-8" lang="pt-br">
 <head>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <header>
     <a href="pix.html">Acessar pix</a>
 </header>
 <body>
-    <div id="c">
+    <div class="c">
     <div class="container">
-    <input id="telefone">Telefone
+        <h1>Gere o link de whatsapp para o seu negócio</h1>
+        <br>
+        Telefone(sem DDD)
+        <br>
+    <input id="telefone" class="inpuT">
     <br>
-    <input id ="mensagem">Mensagem
+    Mensagem(opcional)
     <br>
-    <button id="enviar">Enviar</button>
+    <textarea id ="mensagem"class="inpuTT"></textarea>
+    <br><br>
+
+    <button id="enviarZap" class="enviarZap">Gerar Link do Whatsapp</button>
+    <br>
     <p id="resultado"></p>
     </div>
     </div>

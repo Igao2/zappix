@@ -1,60 +1,282 @@
 <!DOCTYPE html>
 <meta charset="UTF-8" lang="pt-br">
 <head>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="styles.css">
     <script src="https://cdn.rawgit.com/davidshimjs/qrcodejs/gh-pages/qrcode.min.js"></script>
 </head>
 
 <body>
-    <div id="c">
+    <div class="c">
     <div class="container">
-    <input id="pix">pix
+      <h1>
+        Gere o qrCode pix para o seu negócio!
+      </h1>
+      <br><br>
+      Tipo de pix:
+      <select id="tipo">
+        <option value="email">E-mail</option>
+        <option value="telefone">Telefone</option>
+        <option value="cpf">Cpf</option>
+        <option value="cnpj">Cnpj</option>
+      </select>
+      <br><br>
+      Pix
+      <br>
+    <input id="pix" class="inpuTT">
+    <br><br>
+    Valor do pix(Opcional)
     <br>
-    <input id ="valor">valor
+    <input id ="valor"class="inpuTT">
+    <br><br>
+    <button id="enviar" class="enviarZap">Enviar</button>
     <br>
-    <button id="enviar">Enviar</button>
-    <div id="qrcode"></div>
+    
+    <br><br>
+    <div id="qrcode" class="qrcodee"></div>
+    
     </div>
     </div>
 </body>
 <script>
 var button = document.getElementById("enviar")
+var select = document.getElementById("tipo")
+var piX = document.getElementById("pix")
 button.addEventListener("click",function(){
     console.log('1')
-    var pix = document.getElementById("pix").value
-var valor = document.getElementById("valor").value
+if(select.value == "telefone")
+{
+  var pix = document.getElementById("pix").value
+  var p = pix.replace("()","")
+  pix = p
+  console.log(pix)
+}
+if(select.value == "cpf"|| select.value == "cnpj")
+{
+  var pix = document.getElementById("pix").value
+  var p = pix.replace(".","").replace("-","").replace("/","")
+  pix = p
+  console.log(pix)
+}    
+
+
+var v = document.getElementById("valor").value
+var v2 = v.replace(",",".").replace("R$","").replace(" ","")
+var valor = parseFloat(v2)
 var cidade = "Itanhandu"
 var nome = "Igor"
 
-var payload = "00020126360014BR.GOV.BCB.PIX0114+55"+pix+"520400005303986540512.005802BR5903'126003'1262070503***6304DC91"
-var crc167 = crc16(payload)
-var link = "pix://" + payload
+var opcao = tipo.value
+if(opcao=="telefone")
+
+{
+  if(valor==0.0){
+    var payload = "00020126360014BR.GOV.BCB.PIX0114+55"+pix+"520400005303986540500.005802BR5903'126003'1262070503***6304DC91"
+  }
+  else{
+    var payload = "00020126360014BR.GOV.BCB.PIX0114+55"+pix+"5204000053039865405"+valor+"5802BR5903'126003'1262070503***6304DC91"
+  }
+
 var qrcodeElement = document.getElementById("qrcode");
 var qrcode = new QRCode(qrcodeElement, {
+  id: "image",
   text: payload,
   width: 110,
   height: 110,
 
 })
+var qrCodeData = qrcodeElement.getElementsByTagName("img")[0]
+setTimeout(function() {
+        if (qrCodeData.complete) {
 
-});
-
-function crc16(str) {
-    var crc = 0xFFFF;
-
-    for (var i = 0; i < str.length; i++) {
-      var byte = str.charCodeAt(i);
-      crc ^= (byte << 8);
-
-      for (var j = 0; j < 8; j++) {
-        if ((crc & 0x8000) !== 0) {
-          crc = (crc << 1) ^ 0x1021;
+          var srcDaImagem = qrCodeData.src;
+          
+          var link = document.createElement('a');
+          link.href = srcDaImagem;
+          link.download = 'minha_imagem.jpg';
+          document.body.appendChild(link);
+          link.click();
+          document.body.removeChild(link);
         } else {
-          crc <<= 1;
+          console.log("A imagem ainda está carregando. Tente novamente.");
         }
-      }
+      }, 1000); 
     }
-
-    return (crc & 0xFFFF).toString(16).toUpperCase().padStart(4, '0');
+if(opcao=="cpf"){
+  if(valor==0.0)
+  {
+    var payload = "00020126360014BR.GOV.BCB.PIX0111"+pix+"520400005303986540500.005802BR5903'126003'1262070503***6304DC91"
   }
+  else{
+    var payload = "00020126360014BR.GOV.BCB.PIX0111"+pix+"5204000053039865405"+valor+"5802BR5903'126003'1262070503***6304DC91"
+  }
+
+var qrcodeElement = document.getElementById("qrcode");
+var qrcode = new QRCode(qrcodeElement, {
+  id: "image",
+  text: payload,
+  width: 110,
+  height: 110,
+
+})
+var qrCodeData = qrcodeElement.getElementsByTagName("img")[0]
+setTimeout(function() {
+        if (qrCodeData.complete) {
+
+          var srcDaImagem = qrCodeData.src;
+          
+          var link = document.createElement('a');
+          link.href = srcDaImagem;
+          link.download = 'minha_imagem.jpg';
+          document.body.appendChild(link);
+          link.click();
+          document.body.removeChild(link);
+        } else {
+          console.log("A imagem ainda está carregando. Tente novamente.");
+        }
+      }, 1000); 
+
+}
+if(opcao=="email")
+{
+  if(valor==0.0)
+  {
+    var payload = "00020126360014BR.GOV.BCB.PIX0128"+pix+"520400005303986540500.005802BR5903'126003'1262070503***6304DC91"
+  }
+  else{
+    var payload = "00020126360014BR.GOV.BCB.PIX0128"+pix+"5204000053039865405"+valor+"5802BR5903'126003'1262070503***6304DC91"
+  }
+
+var qrcodeElement = document.getElementById("qrcode");
+var qrcode = new QRCode(qrcodeElement, {
+  id: "image",
+  text: payload,
+  width: 110,
+  height: 110,
+
+})
+var qrCodeData = qrcodeElement.getElementsByTagName("img")[0]
+setTimeout(function() {
+        if (qrCodeData.complete) {
+
+          var srcDaImagem = qrCodeData.src;
+          
+          var link = document.createElement('a');
+          link.href = srcDaImagem;
+          link.download = 'minha_imagem.jpg';
+          document.body.appendChild(link);
+          link.click();
+          document.body.removeChild(link);
+        } else {
+          console.log("A imagem ainda está carregando. Tente novamente.");
+        }
+      }, 1000); 
+
+
+}
+if(opcao=="cnpj")
+{
+  if(valor==0.0)
+  {
+    var payload = "00020126360014BR.GOV.BCB.PIX0111"+pix+"520400005303986540500.005802BR5903'126003'1262070503***6304DC91"
+  }
+  else{
+    var payload = "00020126360014BR.GOV.BCB.PIX0111"+pix+"5204000053039865405"+valor+"5802BR5903'126003'1262070503***6304DC91"
+  }
+
+var qrcodeElement = document.getElementById("qrcode");
+var qrcode = new QRCode(qrcodeElement, {
+  id: "image",
+  text: payload,
+  width: 110,
+  height: 110,
+
+})
+var qrCodeData = qrcodeElement.getElementsByTagName("img")[0]
+setTimeout(function() {
+        if (qrCodeData.complete) {
+
+          var srcDaImagem = qrCodeData.src;
+          
+          var link = document.createElement('a');
+          link.href = srcDaImagem;
+          link.download = 'minha_imagem.jpg';
+          document.body.appendChild(link);
+          link.click();
+          document.body.removeChild(link);
+        } else {
+          console.log("A imagem ainda está carregando. Tente novamente.");
+        }
+      }, 1000); 
+
+
+}  
+})
+piX.addEventListener("keypress",function(){
+  console.log(1)
+if(select.value == "telefone")
+{
+  if(piX.value.length == 0)
+  {
+    piX.value+="("
+  }
+  if(piX.value.length ==3)
+  {
+    piX.value+=")"
+  }
+  var valorlimitado = piX.value.slice(0,12)
+  piX.value = valorlimitado
+}
+if(select.value == "cpf")
+{
+  if(piX.value.length == 3|| piX.value.length == 7)
+  {
+    piX.value +="."
+  }
+  if(piX.value.length == 11)
+  {
+    piX.value += "-"
+  }
+  var valorlimitado = piX.value.slice(0,14)
+  piX.value = valorlimitado
+}
+if(select.value == "cnpj")
+{
+  if(piX.value.length == 2 || piX.value.length == 6 )
+  {
+    piX.value += "."
+}
+  if(piX.value.length == 10)
+  {
+    piX.value += "/"
+  }
+  var valorlimitado = piX.value.slice(0,14)
+  piX.value = valorlimitado
+}
+
+
+
+})
+select.addEventListener("change",function() {
+  piX.value = ""
+  if(select.value == "telefone")
+  {
+    piX.placeholder = "(99)999999999"
+  }
+  if(select.value == "cpf")
+  {
+    piX.placeholder = "999.999.999-99"
+  }
+  if(select.value == "email")
+  {
+    piX.placeholder = "example@email.com"
+  }
+  if(select.value == "cnpj")
+  {
+    piX.placeholder = "99.999.999/999"
+  }
+})
+
+
+
+
 </script>
