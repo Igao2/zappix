@@ -4,6 +4,9 @@
     justify-content: center;
 
 }
+textarea{
+    resize: none;
+}
 .container
 {
     font-family: 'Montserrat',sans-serif;
@@ -15,6 +18,9 @@
 a{
     outline: none;
     font-family: 'Montserrat',sans-serif;
+}
+.result{
+    display: none;
 }
 .inpuT{
 position: relative;

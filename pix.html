@@ -3,8 +3,11 @@
 <head>
     <link rel="stylesheet" href="styles.css">
     <script src="https://cdn.rawgit.com/davidshimjs/qrcodejs/gh-pages/qrcode.min.js"></script>
+    <script src = browser/faz-um-pix.min.js></script>
 </head>
-
+<header>
+  <a href="index.html">Acessar o gerador de links para o whatsapp</a>
+</header>
 <body>
     <div class="c">
     <div class="container">
@@ -42,57 +45,68 @@ var button = document.getElementById("enviar")
 var select = document.getElementById("tipo")
 var piX = document.getElementById("pix")
 button.addEventListener("click",function(){
-    console.log('1')
 if(select.value == "telefone")
 {
   var pix = document.getElementById("pix").value
-  var p = pix.replace("()","")
+  var p = pix.replace("(","").replace(")","")
   pix = p
   console.log(pix)
 }
-if(select.value == "cpf"|| select.value == "cnpj")
+if(select.value == "cpf")
 {
   var pix = document.getElementById("pix").value
-  var p = pix.replace(".","").replace("-","").replace("/","")
+  var p = pix.replace(/\./g, "").replace(/-/g, "");
   pix = p
   console.log(pix)
-}    
-
-
+}
+if(select.value == "cnpj")
+{
+  var pix = document.getElementById("pix").value
+  var p = pix.replace(/\./g, "").replace(/\//g, "");
+  pix = p
+  console.log(pix)
+}
+if(select.value == "email")
+{
+  var pix = document.getElementById("pix").value
+}
 var v = document.getElementById("valor").value
-var v2 = v.replace(",",".").replace("R$","").replace(" ","")
+if(v!="")
+{
+var v2 = v.replace(/[^0-9.]/g, '');
 var valor = parseFloat(v2)
+valor = valor.toFixed(2);
+}
+else{
+  valor = 0
+  valor = valor.toFixed(2)
+}
+
+console.log(valor)
 var cidade = "Itanhandu"
 var nome = "Igor"
 
-var opcao = tipo.value
-if(opcao=="telefone")
-
+if(valor==0.00)
 {
-  if(valor==0.0){
-    var payload = "00020126360014BR.GOV.BCB.PIX0114+55"+pix+"520400005303986540500.005802BR5903'126003'1262070503***6304DC91"
-  }
-  else{
-    var payload = "00020126360014BR.GOV.BCB.PIX0114+55"+pix+"5204000053039865405"+valor+"5802BR5903'126003'1262070503***6304DC91"
-  }
-
-var qrcodeElement = document.getElementById("qrcode");
-var qrcode = new QRCode(qrcodeElement, {
+  var code = _pix.Pix(pix, "SILVA SILVA", "RIO DE JANEIRO", "0.00", "Pedido #123456");
+  code.then((result)=>{
+    var qrcodeElement = document.getElementById("qrcode");
+    var qrcode = new QRCode(qrcodeElement, {
   id: "image",
-  text: payload,
+  text: result,
   width: 110,
   height: 110,
 
 })
-var qrCodeData = qrcodeElement.getElementsByTagName("img")[0]
-setTimeout(function() {
+    var qrCodeData = qrcodeElement.getElementsByTagName("img")[0]
+    setTimeout(function() {
         if (qrCodeData.complete) {
 
           var srcDaImagem = qrCodeData.src;
           
           var link = document.createElement('a');
           link.href = srcDaImagem;
-          link.download = 'minha_imagem.jpg';
+          link.download = 'qrcode.jpg';
           document.body.appendChild(link);
           link.click();
           document.body.removeChild(link);
@@ -100,69 +114,28 @@ setTimeout(function() {
           console.log("A imagem ainda está carregando. Tente novamente.");
         }
       }, 1000); 
-    }
-if(opcao=="cpf"){
-  if(valor==0.0)
-  {
-    var payload = "00020126360014BR.GOV.BCB.PIX0111"+pix+"520400005303986540500.005802BR5903'126003'1262070503***6304DC91"
-  }
-  else{
-    var payload = "00020126360014BR.GOV.BCB.PIX0111"+pix+"5204000053039865405"+valor+"5802BR5903'126003'1262070503***6304DC91"
-  }
-
-var qrcodeElement = document.getElementById("qrcode");
-var qrcode = new QRCode(qrcodeElement, {
-  id: "image",
-  text: payload,
-  width: 110,
-  height: 110,
-
-})
-var qrCodeData = qrcodeElement.getElementsByTagName("img")[0]
-setTimeout(function() {
-        if (qrCodeData.complete) {
-
-          var srcDaImagem = qrCodeData.src;
-          
-          var link = document.createElement('a');
-          link.href = srcDaImagem;
-          link.download = 'minha_imagem.jpg';
-          document.body.appendChild(link);
-          link.click();
-          document.body.removeChild(link);
-        } else {
-          console.log("A imagem ainda está carregando. Tente novamente.");
-        }
-      }, 1000); 
-
+    })
 }
-if(opcao=="email")
-{
-  if(valor==0.0)
-  {
-    var payload = "00020126360014BR.GOV.BCB.PIX0128"+pix+"520400005303986540500.005802BR5903'126003'1262070503***6304DC91"
-  }
-  else{
-    var payload = "00020126360014BR.GOV.BCB.PIX0128"+pix+"5204000053039865405"+valor+"5802BR5903'126003'1262070503***6304DC91"
-  }
-
-var qrcodeElement = document.getElementById("qrcode");
-var qrcode = new QRCode(qrcodeElement, {
+else{
+  var code = _pix.Pix(pix, "SILVA SILVA", "RIO DE JANEIRO", valor, "Pedido #123456");
+  code.then((result)=>{
+    var qrcodeElement = document.getElementById("qrcode");
+    var qrcode = new QRCode(qrcodeElement, {
   id: "image",
-  text: payload,
+  text: result,
   width: 110,
   height: 110,
 
 })
-var qrCodeData = qrcodeElement.getElementsByTagName("img")[0]
-setTimeout(function() {
+    var qrCodeData = qrcodeElement.getElementsByTagName("img")[0]
+    setTimeout(function() {
         if (qrCodeData.complete) {
 
           var srcDaImagem = qrCodeData.src;
           
           var link = document.createElement('a');
           link.href = srcDaImagem;
-          link.download = 'minha_imagem.jpg';
+          link.download = 'qrcode.jpg';
           document.body.appendChild(link);
           link.click();
           document.body.removeChild(link);
@@ -170,46 +143,11 @@ setTimeout(function() {
           console.log("A imagem ainda está carregando. Tente novamente.");
         }
       }, 1000); 
-
-
+    })
 }
-if(opcao=="cnpj")
-{
-  if(valor==0.0)
-  {
-    var payload = "00020126360014BR.GOV.BCB.PIX0111"+pix+"520400005303986540500.005802BR5903'126003'1262070503***6304DC91"
-  }
-  else{
-    var payload = "00020126360014BR.GOV.BCB.PIX0111"+pix+"5204000053039865405"+valor+"5802BR5903'126003'1262070503***6304DC91"
-  }
 
-var qrcodeElement = document.getElementById("qrcode");
-var qrcode = new QRCode(qrcodeElement, {
-  id: "image",
-  text: payload,
-  width: 110,
-  height: 110,
-
-})
-var qrCodeData = qrcodeElement.getElementsByTagName("img")[0]
-setTimeout(function() {
-        if (qrCodeData.complete) {
-
-          var srcDaImagem = qrCodeData.src;
-          
-          var link = document.createElement('a');
-          link.href = srcDaImagem;
-          link.download = 'minha_imagem.jpg';
-          document.body.appendChild(link);
-          link.click();
-          document.body.removeChild(link);
-        } else {
-          console.log("A imagem ainda está carregando. Tente novamente.");
-        }
-      }, 1000); 
-
-
-}  
+document.getElementById("pix").value = ""
+document.getElementById("valor").value = ""
 })
 piX.addEventListener("keypress",function(){
   console.log(1)
